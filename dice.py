@@ -1,9 +1,9 @@
 
 """
-Simulates rolling a six-sided dice and returns the result as a JSON response.
+Simulates rolling a six-sided dice and returns the
 
 Returns:
-    flask.Response: A JSON response containing the result of the dice roll in the format {"result": <int>}.
+    flask.Response: A JSON response containing the
 """
 import random
 from flask import Flask, jsonify
@@ -17,7 +17,7 @@ def roll_dice():
     """
     Simulates rolling a six-sided dice and returns the result as a JSON response.
     Returns:
-        flask.Response: A JSON response containing the result of the dice roll in the format {"result": <int>}.
+        flask.Response: A JSON response containing the result of the d
     """
     
     # Génération d'un nombre aléatoire entre 1 et 6
