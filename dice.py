@@ -19,7 +19,6 @@ def roll_dice():
     Returns:
         flask.Response: A JSON response containing the result of the d
     """
-    
     # Génération d'un nombre aléatoire entre 1 et 6
     dice_roll = random.randint(1, 6) # nosec
     # Retour du résultat sous forme de JSON
