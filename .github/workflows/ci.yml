@@ -1,0 +1,53 @@
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+        pipenv install --dev
+
+    - name: Lint with pylint
+      run: |
+        pipenv run pylint  dice.py 
+
+    - name: Test with pytest
+      run: |
+       pipenv run pytest
+    
+    - name: SAST with Bandit 
+      run: |
+        pipenv run bandit dice.py
+
+    - name: Build the Docker image
+      run: |
+        docker build -t dice-app .
+
+    - name: Install Trivy
+      run: |
+        wget -qO- https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+        echo deb https://aquasecurity.github.io/trivy-repo/deb buster main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+        sudo apt-get update
+        sudo apt-get install trivy
+      
+    - name: Trivy vulnerability scanner
+      run: |
+        trivy image --severity HIGH,CRITICAL --exit-code 1 dice-app
